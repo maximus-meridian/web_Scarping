@@ -9,7 +9,7 @@ option = webdriver.ChromeOptions()
 option.add_argument("--incognito")
 
 # create new instance of chrome in incognito mode
-browser = webdriver.Chrome("C:\\Users\\devar\\AppData\\Local\\conda\\chromedriver_win32\\chromedriver.exe")
+browser = webdriver.Chrome(chromepath)
 
 # go to website of interest
 browser.get("http://finance.yahoo.com/q/hp?s=XEL+Historical+Prices")

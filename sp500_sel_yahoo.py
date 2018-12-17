@@ -29,7 +29,7 @@ for ele in tickers:
     print(i)
     print(ele)
     try:
-        browser_driver_array = webdriver.Chrome("C:\\Users\\devar\\AppData\\Local\\conda\\chromedriver_win32\\chromedriver.exe")
+        browser_driver_array = webdriver.Chrome(chromepath)
         browser_driver_array.get("https://finance.yahoo.com/quote/"+ele+"/history?p="+ele+"&.tsrc=fin-srch")
         titles_element = browser_driver_array.find_elements_by_xpath(".//span[@class='Trsdu(0.3s) Fw(b) Fz(36px) Mb(-4px) D(ib)']")
         print(titles_element[0].text)

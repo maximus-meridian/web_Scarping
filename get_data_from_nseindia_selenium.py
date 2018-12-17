@@ -44,7 +44,17 @@ button = driver.find_element_by_id("get")
 button.click()
 
 
+html_source = driver.find_element_by_id("historicalData")
+z = html_source.text.split("\n")
+col_name = z[2].split(" ")
+z = z[8:]
 
+df = [ x.split(" ") for x in z]
+
+x = pd.DataFrame(df)
+print(x.head(10))
+df1 = x[[2,8]]
+df1.columns = ["date", "close price"]
 
 
 

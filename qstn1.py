@@ -65,7 +65,7 @@ tickers = corrected_table['Symbol'].tolist()
 gics = corrected_table['GICS Sector'].tolist()
 
 companies_list = pd.concat([pd.DataFrame(tickers), pd.DataFrame(gics)], axis=1, sort=False)
-companies_list.to_csv("Company.csv")
+#companies_list.to_csv("Company.csv")
 #print (tickers)
 
 
@@ -104,7 +104,7 @@ for ele in tickers[:10]:
         result = pd.concat([pd.DataFrame(dates), pd.DataFrame(data)], axis=1, sort=False)
         result.columns = ["Date","Open","	High"	,"Low"	,"Close",	"Adj Close",	"Volume"]
         result.head(10)
-        gain_daily.append((result['Close'][0] - result['Close'][len(result)-1])/len(result))
+        gain_daily.append((float(result['Close'][0]) - float(result['Close'][len(result)-1]))/len(result))
         close_daily.append(result['Close'])
         result.to_csv(ele + "_daily.csv")
         browser_driver_array.quit()
@@ -131,7 +131,7 @@ for ele in tickers[:10]:
         result = pd.concat([pd.DataFrame(dates), pd.DataFrame(data)], axis=1, sort=False)
         result.columns = ["Date","Open","	High"	,"Low"	,"Close",	"Adj Close",	"Volume"]
         result.head(10)
-        gain_weekly.append((result['Close'][0] - result['Close'][len(result)-1])/len(result))
+        gain_weekly.append((float(result['Close'][0]) - float(result['Close'][len(result)-1]))/len(result))
         close_weekly.append(result['Close'])
         result.to_csv(ele + "_weekly.csv")
         browser_driver_array.quit()
@@ -159,7 +159,7 @@ for ele in tickers[:10]:
         result = pd.concat([pd.DataFrame(dates), pd.DataFrame(data)], axis=1, sort=False)
         result.columns = ["Date","Open","	High"	,"Low"	,"Close",	"Adj Close",	"Volume"]
         result.head(10)
-        gain_monthly.append((result['Close'][0] - result['Close'][len(result)-1])/len(result))
+        gain_monthly.append((float(result['Close'][0]) - float(result['Close'][len(result)-1]))/len(result))
         close_monthly.append(result['Close'])
         result.to_csv(ele + "_monthly.csv")
         browser_driver_array.quit()

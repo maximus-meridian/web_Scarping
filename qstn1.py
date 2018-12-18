@@ -163,7 +163,7 @@ for ele in tickers[:10]:
         result.head(10)
         result.to_csv(ele + "_monthly.csv")
         try:
-            gain_monthly.append((float(result['Close'][0]) - float(result['Close'][len(result)-1]))/len(result))
+            gain_monthly.append((float(result['Close'][0]) - float(result['Close'][len(result)-2]))/len(result))
         except:
             pass
         close_monthly.append(result['Close'])

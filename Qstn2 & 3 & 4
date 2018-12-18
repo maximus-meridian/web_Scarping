@@ -1,0 +1,293 @@
+# -*- coding: utf-8 -*-
+"""
+Created on Tue Dec 18 10:36:58 2018
+
+@author: devar
+"""
+
+
+# =============================================================================
+# import pandas as pd
+# 
+# path = "F:\\MSIT\\specializations\\Visuvalization\\model paper 3\\temp_result.csv"
+# #data = pd.from_csv(path, header=0, sep=', ', index_col=0, parse_dates=True, encoding=None, tupleize_cols=None, infer_datetime_format=False)
+# data =  pd.read_csv(path, index_col=0, parse_dates=True)
+# data.columns = ["Date"	,"Open","	High"	,"Low"	,"Close",	"Adj Close",	"Volume"]
+# 
+# gain_val = []
+# i = data['Close'][0]
+# for x in data['Close'][1:]:
+#     gain_val.append((i-x)/x)
+#     i = x
+#     
+# gain_val =  gain_val + [0] 
+# result = pd.concat([data, pd.DataFrame(gain_val)], axis=1, sort=False)
+# result.columns = ["Date"	,"Open","	High"	,"Low"	,"Close",	"Adj Close",	"Volume", "gain"]
+# result.head(10)
+# =============================================================================
+
+
+import os
+import pandas as pd
+import numpy
+
+
+csv_files_daily = []
+path = "F:\\MSIT\\specializations\\exam\\"
+
+directory = os.path.join(path)
+for root,dirs,files in os.walk(directory):
+    for file in files:
+       if file.endswith("_daily.csv"):
+           csv_files_daily.append(file)
+
+
+com_name=[]
+gain = []
+daily_gains = []
+p =[]
+for file in csv_files_daily:
+    data =  pd.read_csv(path+file, index_col=0, parse_dates=True)
+    a =str(file).split("_")[0]
+    b= (data['Close'][0] - data['Close'][len(data)-1])/data['Close'][len(data)-1]
+    c = list(-(data['Close'].pct_change())[1:98])
+    com_name.append(str(file).split(".")[0])
+    gain.append((data['Close'][0] - data['Close'][len(data)-1])/data['Close'][len(data)-1])
+    daily_gains.append(list(-(data['Close'].pct_change())[1:98]))
+    p.append([a,b,c])
+
+
+
+final = sorted(p, key = lambda x: float(x[1]))
+
+final = final[:5] + final[5:]
+
+corr = []
+for x in range(len(final)):
+    temp = []
+    for y in range(len(final)):
+        temp.append( numpy.corrcoef(final[x][2], final[y][2])[0][1])
+    corr.append(temp)
+
+
+# =============================================================================
+# numpy.corrcoef(daily_gains[0], daily_gains[])
+# z = x.corr(x)
+# 
+# old_min = min(gain)
+# old_max = max(gain)
+# new_min = -1
+# new_max = 1
+# gain2=[]
+# for x in gain:
+#     new_value = ( (x - old_min) / (old_max - old_min) ) * (new_max - new_min) + new_min
+#     gain2.append(new_value)
+# 
+# corr2 = []
+# for x in gain2:
+#     temp = []
+#     for y in gain2:
+#         if y != 0:
+#             temp.append(x/y)
+#         else:
+#             temp.append(1)
+#     corr2.append(temp)
+# =============================================================================
+'''
+import numpy as np 
+from pandas import DataFrame
+import matplotlib.pyplot as plt
+
+Index= com_name
+Cols = com_name
+df = DataFrame(corr, index=Index, columns=Cols)
+
+plt.pcolor(df)
+plt.yticks(np.arange(0.5, len(df.com_name), 1), df.index)
+plt.xticks(np.arange(0.5, len(df.com_name), 1), df.columns)
+plt.show()
+
+
+import numpy as np
+import seaborn as sns
+import matplotlib.pylab as plt
+
+uniform_data = corr
+ax = sns.heatmap(uniform_data, linewidth=0.5, vmin=-1, vmax=1, center=0)
+
+ax.set_axis_labels('Colors', 'Values')
+plt.show()
+
+
+import matplotlib.pyplot as plt
+# Builtin colourmap "seismic" has the blue-white-red
+#   scale you want
+plt.pcolor(corr, cmap=plt.cm.seismic, vmin=-1, vmax=1)
+plt.colorbar()
+plt.show()
+'''
+
+
+
+
+import matplotlib.pyplot as plt
+import matplotlib.colors as colors
+import numpy as np
+
+# This dictionary defines the colormap
+cdict = {'blue':  ((0.0, 0.0, 0.0),   # no red at 0
+                  (0.5, 1.0, 1.0),   # all channels set to 1.0 at 0.5 to create white
+                  (1.0, 0.8, 0.8)),  # set to 0.8 so its not too bright at 1
+
+        'red': ((0.0, 0.8, 0.8),   # set to 0.8 so its not too bright at 0
+                  (0.5, 1.0, 1.0),   # all channels set to 1.0 at 0.5 to create white
+                  (1.0, 0.0, 0.0)),  # no green at 1
+
+        'green':  ((0.0, 0.0, 0.0),   # no blue at 0
+                  (0.5, 1.0, 1.0),   # all channels set to 1.0 at 0.5 to create white
+                  (1.0, 0.0, 0.0))   # no blue at 1
+       }
+
+GnRdBe = colors.LinearSegmentedColormap('GnRdBe', cdict)
+fig,ax = plt.subplots(1)
+dummydata = corr
+p=ax.pcolormesh(dummydata,cmap=GnRdBe,vmin=-1,vmax=1)
+fig.colorbar(p,ax=ax)
+plt.show()
+
+
+
+
+
+wiki =pd.read_csv(path+"company.csv", index_col=0, parse_dates=True)
+d= {}
+cc = wiki["com_name"]
+gg = wiki["gic"]
+for i in range(len(wiki)):
+    d[cc[i]] = gg[i]
+
+
+bar_dict = {}
+
+final[0][0]
+
+good_com = []
+bad_com = []
+cutoff = 5
+i = 0
+for x in final:
+    if i < cutoff:
+        bad_com.append(x[0])
+    else:
+        good_com.append(x[0])
+    
+    
+    if x[0] in d.keys():
+        
+        if d[x[0]] in bar_dict.keys():
+        
+            bar_dict [ d[x[0]]].append(x[0])
+        else:
+            bar_dict [ d[x[0]]]= [x[0]]
+    i+=1
+
+
+
+import matplotlib.pyplot as plt
+from matplotlib.dates import date2num
+import datetime
+
+x = bar_dict.keys()
+
+good_bar= []
+bad_bar = []
+
+for i in x:
+    g_c=0
+    b_c=0
+    for k in bar_dict[i]:
+        if k in good_com:
+            g_c+=1
+        elif k in bad_com:
+            b_c+=1
+    good_bar.append(g_c)
+    bad_bar.append(b_c)
+
+
+'''
+x = [datetime.datetime(2011, 1, 4, 0, 0),
+     datetime.datetime(2011, 1, 5, 0, 0),
+     datetime.datetime(2011, 1, 6, 0, 0)]
+x = date2num(x)
+y = [4, 9, 2]
+z=[1,2,3]
+k=[11,12,13]
+
+ax = plt.subplot(111)
+ax.bar(x-0.2, good_bar,width=0.2,color='b',align='center')
+ax.bar(x, z,bad_bar=0.2,color='g',align='center')
+#ax.bar(x+0.2, k,width=0.2,color='r',align='center')
+ax.xaxis_date()
+
+plt.show()
+
+
+
+
+
+x = [datetime.datetime(2011, 1, 4, 0, 0),
+     datetime.datetime(2011, 1, 5, 0, 0),
+     datetime.datetime(2011, 1, 6, 0, 0)]
+x = date2num(x)
+'''
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+import numpy as np
+import matplotlib.pyplot as plt
+
+N = 6
+ind = np.arange(N)  # the x locations for the groups
+width = 0.30       # the width of the bars
+
+fig = plt.figure()
+ax = fig.add_subplot(111)
+
+yvals = bad_bar
+rects1 = ax.bar(ind, yvals, width, color='r')
+zvals = good_bar
+rects2 = ax.bar(ind+width, zvals, width, color='g')
+#kvals = [11,12,13]
+#rects3 = ax.bar(ind+width*2, kvals, width, color='b')
+
+ax.set_ylabel('Scores')
+ax.set_xticks(ind+width)
+ax.set_xticklabels( x, rotation=90)
+ax.legend( (rects1[0], rects2[0]), ('y', 'z') )
+
+def autolabel(rects):
+    for rect in rects:
+        h = rect.get_height()
+        ax.text(rect.get_x()+rect.get_width()/2., 1.05*h, '%d'%int(h),
+                ha='center', va='bottom')
+
+autolabel(rects1)
+autolabel(rects2)
+
+
+plt.show()

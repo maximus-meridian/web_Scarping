@@ -178,7 +178,7 @@ for ele in tickers[:10]:
         print(e)
 
 
-
+'''
 comp = pd.DataFrame({'com_name': com_name,
                               'gic': gic,
                               'gain_daily' : gain_daily,
@@ -191,3 +191,4 @@ comp = pd.DataFrame({'com_name': com_name,
 
     
 comp.to_csv('company.csv')    
+'''

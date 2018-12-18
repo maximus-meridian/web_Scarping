@@ -1,0 +1,72 @@
+import os
+import pandas as pd
+import numpy
+
+
+csv_files_daily = []
+path = "F:\\MSIT\\specializations\\exam\\"
+
+directory = os.path.join(path)
+for root,dirs,files in os.walk(directory):
+    for file in files:
+       if file.endswith("_daily.csv"):
+           csv_files_daily.append(file)
+
+
+com_name=[]
+gain = []
+daily_gains = []
+p =[]
+for file in csv_files_daily:
+    data =  pd.read_csv(path+file, index_col=0, parse_dates=True)
+    a =str(file).split(".")[0]
+    b= (data['Close'][0] - data['Close'][len(data)-1])/data['Close'][len(data)-1]
+    c = list(-(data['Close'].pct_change())[1:98])
+    com_name.append(str(file).split(".")[0])
+    gain.append((data['Close'][0] - data['Close'][len(data)-1])/data['Close'][len(data)-1])
+    daily_gains.append(list(-(data['Close'].pct_change())[1:98]))
+    p.append([a,b,c])
+
+
+
+final = sorted(p, key = lambda x: float(x[1]))
+
+final = final[:5] + final[5:]
+
+corr = []
+for x in range(len(final)):
+    temp = []
+    for y in range(len(final)):
+        temp.append( numpy.corrcoef(final[x][2], final[y][2])[0][1])
+    corr.append(temp)
+
+
+
+import matplotlib.pyplot as plt
+import matplotlib.colors as colors
+import numpy as np
+
+# This dictionary defines the colormap
+cdict = {'blue':  ((0.0, 0.0, 0.0),   # no red at 0
+                  (0.5, 1.0, 1.0),   # all channels set to 1.0 at 0.5 to create white
+                  (1.0, 0.8, 0.8)),  # set to 0.8 so its not too bright at 1
+
+        'red': ((0.0, 0.8, 0.8),   # set to 0.8 so its not too bright at 0
+                  (0.5, 1.0, 1.0),   # all channels set to 1.0 at 0.5 to create white
+                  (1.0, 0.0, 0.0)),  # no green at 1
+
+        'green':  ((0.0, 0.0, 0.0),   # no blue at 0
+                  (0.5, 1.0, 1.0),   # all channels set to 1.0 at 0.5 to create white
+                  (1.0, 0.0, 0.0))   # no blue at 1
+       }
+
+GnRdBe = colors.LinearSegmentedColormap('GnRdBe', cdict)
+fig,ax = plt.subplots(1)
+dummydata = corr
+p=ax.pcolormesh(dummydata,cmap=GnRdBe,vmin=-1,vmax=1)
+fig.colorbar(p,ax=ax)
+plt.show()
+
+
+
+

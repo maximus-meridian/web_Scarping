@@ -84,7 +84,7 @@ for ele in tickers[:10]:
     print(ele)
     try:
         #day wise
-        browser_driver_array = webdriver.Chrome("C:\\Users\\devar\\AppData\\Local\\conda\\chromedriver_win32\\chromedriver.exe")
+        browser_driver_array = webdriver.Chrome("C:\\Users\\****\\AppData\\Local\\conda\\chromedriver_win32\\chromedriver.exe")
         browser_driver_array.get("https://finance.yahoo.com/quote/"+ele+"/history?period1=1387305000&period2=1545071400&interval=1d&filter=history&frequency=1d")
         titles_element = browser_driver_array.find_elements_by_xpath(".//span[@class='Trsdu(0.3s) Fw(b) Fz(36px) Mb(-4px) D(ib)']")
         #scroll2(browser_driver_array)
@@ -104,14 +104,15 @@ for ele in tickers[:10]:
         result = pd.concat([pd.DataFrame(dates), pd.DataFrame(data)], axis=1, sort=False)
         result.columns = ["Date","Open","	High"	,"Low"	,"Close",	"Adj Close",	"Volume"]
         result.head(10)
+        result.to_csv(ele + "_daily.csv")
         gain_daily.append((float(result['Close'][0]) - float(result['Close'][len(result)-1]))/len(result))
         close_daily.append(result['Close'])
-        result.to_csv(ele + "_daily.csv")
+        
         browser_driver_array.quit()
 
 
         #week wise
-        browser_driver_array = webdriver.Chrome("C:\\Users\\devar\\AppData\\Local\\conda\\chromedriver_win32\\chromedriver.exe")
+        browser_driver_array = webdriver.Chrome("C:\\Users\\****ar\\AppData\\Local\\conda\\chromedriver_win32\\chromedriver.exe")
         browser_driver_array.get("https://finance.yahoo.com/quote/"+ele+"/history?period1=1387305000&period2=1545071400&interval=1wk&filter=history&frequency=1wk")
         titles_element = browser_driver_array.find_elements_by_xpath(".//span[@class='Trsdu(0.3s) Fw(b) Fz(36px) Mb(-4px) D(ib)']")
         #scroll2(browser_driver_array)
@@ -134,12 +135,13 @@ for ele in tickers[:10]:
         gain_weekly.append((float(result['Close'][0]) - float(result['Close'][len(result)-1]))/len(result))
         close_weekly.append(result['Close'])
         result.to_csv(ele + "_weekly.csv")
+        
         browser_driver_array.quit()
 
 
 
         #week wise
-        browser_driver_array = webdriver.Chrome("C:\\Users\\devar\\AppData\\Local\\conda\\chromedriver_win32\\chromedriver.exe")
+        browser_driver_array = webdriver.Chrome("C:\\Users\\****\\AppData\\Local\\conda\\chromedriver_win32\\chromedriver.exe")
         browser_driver_array.get("https://finance.yahoo.com/quote/"+ele+"/history?period1=1387305000&period2=1545071400&interval=1mo&filter=history&frequency=1mo")
         titles_element = browser_driver_array.find_elements_by_xpath(".//span[@class='Trsdu(0.3s) Fw(b) Fz(36px) Mb(-4px) D(ib)']")
         #scroll2(browser_driver_array)
@@ -152,16 +154,17 @@ for ele in tickers[:10]:
         data2 =  []
         
         for a in data:
-            if "Dividend" not in a:
+            if "Dividend" or '-' not in a:
                 data2.append(a)
         dates = [[z[:12]] for z in data2]
         data = [z[12:].strip().split(" ") for z in data2]
         result = pd.concat([pd.DataFrame(dates), pd.DataFrame(data)], axis=1, sort=False)
         result.columns = ["Date","Open","	High"	,"Low"	,"Close",	"Adj Close",	"Volume"]
         result.head(10)
+        result.to_csv(ele + "_monthly.csv")
         gain_monthly.append((float(result['Close'][0]) - float(result['Close'][len(result)-1]))/len(result))
         close_monthly.append(result['Close'])
-        result.to_csv(ele + "_monthly.csv")
+        
         browser_driver_array.quit()
 
         com_name.append(ele)

@@ -84,7 +84,7 @@ for ele in tickers[:10]:
     print(ele)
     try:
         #day wise
-        browser_driver_array = webdriver.Chrome("C:\\Users\\****\\AppData\\Local\\conda\\chromedriver_win32\\chromedriver.exe")
+        browser_driver_array = webdriver.Chrome("C:\\Users\\devar\\AppData\\Local\\conda\\chromedriver_win32\\chromedriver.exe")
         browser_driver_array.get("https://finance.yahoo.com/quote/"+ele+"/history?period1=1387305000&period2=1545071400&interval=1d&filter=history&frequency=1d")
         titles_element = browser_driver_array.find_elements_by_xpath(".//span[@class='Trsdu(0.3s) Fw(b) Fz(36px) Mb(-4px) D(ib)']")
         #scroll2(browser_driver_array)
@@ -112,7 +112,7 @@ for ele in tickers[:10]:
 
 
         #week wise
-        browser_driver_array = webdriver.Chrome("C:\\Users\\****ar\\AppData\\Local\\conda\\chromedriver_win32\\chromedriver.exe")
+        browser_driver_array = webdriver.Chrome("C:\\Users\\devar\\AppData\\Local\\conda\\chromedriver_win32\\chromedriver.exe")
         browser_driver_array.get("https://finance.yahoo.com/quote/"+ele+"/history?period1=1387305000&period2=1545071400&interval=1wk&filter=history&frequency=1wk")
         titles_element = browser_driver_array.find_elements_by_xpath(".//span[@class='Trsdu(0.3s) Fw(b) Fz(36px) Mb(-4px) D(ib)']")
         #scroll2(browser_driver_array)
@@ -141,7 +141,7 @@ for ele in tickers[:10]:
 
 
         #week wise
-        browser_driver_array = webdriver.Chrome("C:\\Users\\****\\AppData\\Local\\conda\\chromedriver_win32\\chromedriver.exe")
+        browser_driver_array = webdriver.Chrome("C:\\Users\\devar\\AppData\\Local\\conda\\chromedriver_win32\\chromedriver.exe")
         browser_driver_array.get("https://finance.yahoo.com/quote/"+ele+"/history?period1=1387305000&period2=1545071400&interval=1mo&filter=history&frequency=1mo")
         titles_element = browser_driver_array.find_elements_by_xpath(".//span[@class='Trsdu(0.3s) Fw(b) Fz(36px) Mb(-4px) D(ib)']")
         #scroll2(browser_driver_array)
@@ -162,7 +162,10 @@ for ele in tickers[:10]:
         result.columns = ["Date","Open","	High"	,"Low"	,"Close",	"Adj Close",	"Volume"]
         result.head(10)
         result.to_csv(ele + "_monthly.csv")
-        gain_monthly.append((float(result['Close'][0]) - float(result['Close'][len(result)-1]))/len(result))
+        try:
+            gain_monthly.append((float(result['Close'][0]) - float(result['Close'][len(result)-1]))/len(result))
+        except:
+            pass
         close_monthly.append(result['Close'])
         
         browser_driver_array.quit()
